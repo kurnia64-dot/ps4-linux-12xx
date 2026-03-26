@@ -711,20 +711,6 @@ static const struct drm_display_mode mode_1080p = {
 		 DRM_MODE_FLAG_PHSYNC | DRM_MODE_FLAG_PVSYNC),
 	.picture_aspect_ratio = HDMI_PICTURE_ASPECT_16_9
 };
-/* Having a 120Hz modeline causes incorrect mode selection
- * by GUI / Display Manager, causing a 60Hz monitor to try
- * with a 120Hz mode - leading to a blackscreen.
- * Only fix seems to be having a xorg.conf in /usr/share/X11/xorg.conf.d/
- *
- * Try setting a TYPE_PREFFERED mode
- */
-/* 63 - 1920x1080@120Hz */
-static const struct drm_display_mode mode_1080p120 = {
-	DRM_MODE("1920x1080", DRM_MODE_TYPE_DRIVER, 297000, 1920, 2008,
-			2052, 2200, 0, 1080, 1084, 1089, 1125, 0,
-		   DRM_MODE_FLAG_PHSYNC | DRM_MODE_FLAG_PVSYNC),
-	  .picture_aspect_ratio = HDMI_PICTURE_ASPECT_16_9
-};
 
 int ps4_bridge_get_modes(struct drm_connector *connector)
 {
@@ -733,9 +719,6 @@ int ps4_bridge_get_modes(struct drm_connector *connector)
 	pr_debug("ps4_bridge_get_modes\n");
 
 	newmode = drm_mode_duplicate(dev, &mode_1080p);
-	drm_mode_probed_add(connector, newmode);
-
-	newmode = drm_mode_duplicate(dev, &mode_1080p120);
 	drm_mode_probed_add(connector, newmode);
 
 	//newmode = drm_mode_duplicate(dev, &mode_720p);
